@@ -1,4 +1,4 @@
-import streamlit as에 입
+import streamlit as st
 
 st.set_page_config(
     page_title="AI 면접 시스템",
