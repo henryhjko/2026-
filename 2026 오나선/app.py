@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as에 입
 
 st.set_page_config(
     page_title="AI 면접 시스템",
@@ -14,7 +14,8 @@ st.divider()
 st.markdown("""
 ### 환영합니다!
 
-생성형 AI가 게임회사 면접을 평가하는 프로그램입니다.
+###당신은 오픈월드 배틀로얄(배틀그라운드) 게임을 만든 회사에 입사하기 위한 신입사원입니다
+### 생성형 AI가 진행하는 면접을 통과하세요!
 
 왼쪽 사이드바에서 원하는 페이지를 선택하세요. (오나선 참여 학생들은 "👤AI면접" 선택)
 
