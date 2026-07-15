@@ -289,7 +289,6 @@ if st.session_state.page == "home":
     """
 
         with st.spinner("🤖 AI가 답변을 분석하는 중입니다..."):
-            time.sleep(2)
             prompt = SYSTEM_PROMPT.replace(
                 "{interview}",
                 interview
