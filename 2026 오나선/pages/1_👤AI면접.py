@@ -37,6 +37,55 @@ def load_results():
     return data
 
 def save_result(name, questions, answers, result):
+    file_exists = os.path.exists(CSV_FILE)
+    
+    # 1. Gemini가 준 feedbacks 리스트 가져오기 (만약 에러로 인해 없으면 빈 값으로 채우기)
+    feedbacks = result.get("feedbacks", ["", "", "", "", ""])
+    # 리스트 길이가 5개보다 적으면 빈 문자열로 채워줌 (에러 방지)
+    while len(feedbacks) < 5:
+        feedbacks.append("")
+
+    # 2. CSV 파일의 가로줄(헤더) 순서 정의 (fieldnames)
+    fieldnames = [
+        "이름", "총점", "등급", "창의성", "문제해결력", "협업", "플레이어중심", 
+        "강점", "보완점", "총평", 
+        "질문1", "답변1", "코멘트1",
+        "질문2", "답변2", "코멘트2",
+        "질문3", "답변3", "코멘트3",
+        "질문4", "답변4", "코멘트4",
+        "질문5", "답변5", "코멘트5"
+    ]
+
+    # 3. 각 헤더 칸에 어떤 데이터를 매칭해서 넣을지 딕셔너리로 저장
+    row_data = {
+        "이름": name,
+        "총점": result.get("total", 0),
+        "등급": result.get("grade", "C"),
+        "창의성": result.get("creativity", 0),
+        "문제해결력": result.get("problem_solving", 0),
+        "협업": result.get("communication", 0),
+        "플레이어중심": result.get("player_focus", 0),
+        "강점": result.get("strength", ""),
+        "보완점": result.get("improvement", ""),
+        "총평": result.get("summary", "")
+    }
+
+    # 4. 질문, 답변, 코멘트 세트를 순서대로 매핑해서 집어넣음
+    for i in range(5):
+        q_val = questions[i] if i < len(questions) else ""
+        a_val = answers[i] if i < len(answers) else ""
+        c_val = feedbacks[i] if i < len(feedbacks) else ""
+        
+        row_data[f"질문{i+1}"] = q_val
+        row_data[f"답변{i+1}"] = a_val
+        row_data[f"코멘트{i+1}"] = c_val
+
+    # 5. 최종적으로 DictWriter를 사용해 CSV 파일에 작성
+    with open(CSV_FILE, "a", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        if not file_exists:
+            writer.writeheader()  # 최초 생성 시에만 헤더(fieldnames) 작성
+        writer.writerow(row_data) # 데이터 한 줄 추가
 
     file_exists = os.path.exists(CSV_FILE)
 
