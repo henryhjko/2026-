@@ -182,14 +182,14 @@ st.divider()
 # 학생 기록 조회
 # -----------------------------------
 
+# -----------------------------------
+# 학생 기록 조회 (관리자 페이지 수정본)
+# -----------------------------------
 st.header("📂 학생 기록 조회")
 
 names = []
-
 for student in ranking:
-
     if student["이름"] not in names:
-
         names.append(student["이름"])
 
 selected = st.selectbox(
@@ -198,46 +198,46 @@ selected = st.selectbox(
 )
 
 for student in ranking:
-
     if student["이름"] == selected:
-
-        with st.expander(
-            "📄 면접 기록",
-            expanded=True
-        ):
-
-            st.metric(
-                "총점",
-                f"{student['총점']}점"
-            )
-
-            st.metric(
-                "등급",
-                student["등급"]
-            )
+        with st.expander("📄 면접 기록 상세 분석", expanded=True):
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("총점", f"{student.get('총점', '0')}점")
+            with col2:
+                st.metric("등급", student.get("등급", "N/A"))
 
             st.divider()
 
-            for i in range(1,6):
-
-                st.subheader(f"질문 {i}")
-
-                st.info(student[f"질문{i}"])
-
-                st.write("답변")
-
-                st.success(student[f"답변{i}"])
+            # 질문별 상세 보기 카드 (1~5번 루프)
+            for i in range(1, 6):
+                st.markdown(f"### ❓ 질문 {i}")
+                
+                # 1. 질문 내용
+                q_text = student.get(f"질문{i}", "질문 정보 없음")
+                st.info(q_text)
+                
+                # 2. 답변 내용
+                st.markdown("**✏️ 지원자 실제 답변**")
+                a_text = student.get(f"답변{i}", "답변 정보 없음")
+                st.success(a_text)
+                
+                # 3. Gemini 코멘트 내용
+                st.markdown("**🤖 Gemini의 개별 피드백**")
+                c_text = student.get(f"코멘트{i}", "이전 기록이거나 코멘트가 생성되지 않았습니다.")
+                st.warning(c_text)
+                
+                st.write("") # 간격 띄우기
 
             st.divider()
 
-            st.subheader("💪 강점")
-            st.success(student["강점"])
+            st.subheader("💪 종합 강점")
+            st.success(student.get("강점", "데이터 없음"))
 
-            st.subheader("📝 보완점")
-            st.warning(student["보완점"])
+            st.subheader("📝 종합 보완점")
+            st.warning(student.get("보완점", "데이터 없음"))
 
-            st.subheader("📄 총평")
-            st.info(student["총평"])
+            st.subheader("📄 AI 최종 심사 총평")
+            st.info(student.get("총평", "데이터 없음"))
 
         break
 
