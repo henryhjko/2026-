@@ -147,7 +147,7 @@ if "page" not in st.session_state:
 if st.session_state.page == "home":
 
     st.title("🎮 AI가 심사하는 모의면접 체험하기")
-    st.subheader("30402 고현준 30502 정우성 오나선 ")
+    st.subheader("30402 고현준 30521 정우성 오나선 ")
     st.divider()
 
     # -----------------------------------
